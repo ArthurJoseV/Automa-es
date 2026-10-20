@@ -1,0 +1,2 @@
+Este é um arquivo real para o teste de upload de automação.
+Criado para validar o envio de arquivos no LocatorLab.

@@ -20,7 +20,7 @@ test.describe("Login", () => {
 
     test("Login com credenciais inválidas", async ({ page }) => {
         await login(page, 'standard_user', 'secret_sauces');
-        await expect(page).toHaveURL("https://www.saucedemo.com/");
+        await expect(page.locator('.error-message-container')).toBeVisible();
     })
 })
 
@@ -36,6 +36,8 @@ test.describe("Carrinho", () => {
         await page.getByText("Add to cart").first().click();
         await expect(page.locator(".shopping_cart_badge").first()).toHaveText("1");
     })
+
+
 
     // CT - 004
     test("remoção de produto do carrinho", async ({ page }) => {
@@ -65,7 +67,7 @@ test.describe("produtos", () => {
             return parseFloat(precoTexto?.replace("$", "") ?? "") || 0
 
         }))
-        const precosOrdenados = [...precos].sort((a, b)=> a - b);
+        const precosOrdenados = [...precos].sort((a, b) => a - b);
         expect(precos).toEqual(precosOrdenados)
 
 
