@@ -2,22 +2,18 @@ import { Page, Locator } from "@playwright/test"
 
 export class CarrinhoPage {
     readonly page: Page;
-    readonly botao_adicionar: Locator;
+    readonly itens_carrinho: Locator;
     readonly botao_remover: Locator;
-    readonly badge_carrinho: Locator;
+    readonly titulo_carrinho: Locator;
 
     constructor(page: Page) {
         this.page = page
-        this.botao_adicionar = page.getByText('Add to cart')
-        this.botao_remover = page.getByText('Remove')
-        this.badge_carrinho = page.locator('.shopping_cart_badge')
+        this.itens_carrinho = page.locator('[data-test="inventory-item"]')
+        this.botao_remover = page.getByRole('button', { name: 'Remove' })
+        this.titulo_carrinho = page.locator('[data-test="title"]')
     }
 
-    async adicionarPrimeiroProduto() {
-        await this.botao_adicionar.first().click()
-    }
-
-    async removerPrimeiroProduto() {
+    async removerPrimeiroItem() {
         await this.botao_remover.first().click()
     }
 }

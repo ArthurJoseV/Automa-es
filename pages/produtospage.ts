@@ -2,13 +2,23 @@ import { Page, Locator } from "@playwright/test"
 
 export class ProdutosPage {
     readonly page: Page;
+    readonly tituloLoja: Locator;
     readonly seletor_ordenacao: Locator;
-    readonly produtos: Locator;
+    readonly precos: Locator;
+    readonly botao_adicionar: Locator;
+    readonly botao_remover: Locator;
+    readonly badge_carrinho: Locator;
+    readonly link_carrinho: Locator;
 
     constructor(page: Page) {
         this.page = page
-        this.seletor_ordenacao = page.getByRole('combobox')
-        this.produtos = page.getByRole('article')
+        this.tituloLoja = page.locator('[data-test="title"]')
+        this.seletor_ordenacao = page.locator('[data-test="product-sort-container"]')
+        this.precos = page.locator('[data-test="inventory-item-price"]')
+        this.botao_adicionar = page.getByRole('button', { name: 'Add to cart' })
+        this.botao_remover = page.getByRole('button', { name: 'Remove' })
+        this.badge_carrinho = page.locator('[data-test="shopping-cart-badge"]')
+        this.link_carrinho = page.locator('[data-test="shopping-cart-link"]')
     }
 
     async ordenarMenorParaMaior() {
@@ -16,10 +26,19 @@ export class ProdutosPage {
     }
 
     async obterPrecos(): Promise<number[]> {
-        const itens = await this.produtos.all();
-        return Promise.all(itens.map(async (item) => {
-            const texto = await item.getByRole('heading', { level: 3 }).textContent()
-            return parseFloat(texto?.replace('$', '') ?? '')
-        }))
+        const textos = await this.precos.allTextContents()
+        return textos.map(texto => parseFloat(texto.replace('$', '')))
+    }
+
+    async adicionarPrimeiroProduto() {
+        await this.botao_adicionar.first().click()
+    }
+
+    async removerPrimeiroProduto() {
+        await this.botao_remover.first().click()
+    }
+
+    async irParaCarrinho() {
+        await this.link_carrinho.click()
     }
 }
